@@ -1,5 +1,7 @@
 ansible-redhat-openstack
 ========================
+This is best read as "raw"
+
 ggillies Openstack ansible build
 
 1. deploy.openstack.yml         -    default playbook for the install of controller, network and compute nodes
