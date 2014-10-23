@@ -27,3 +27,24 @@
 
 #- name: Disable iptables
 #  service: name=iptables state=stopped enabled=no
+
+- name: Create the rhel 7 server, optional repository
+  template:
+    src: rhel-7-server-optional-rpms.repo.j2
+    dest: /etc/yum.repos.d/rhel-7-server-optional-rpms.repo
+
+- name: Create the rhel 7 server repository
+  template:
+    src: rhel-7-server-rpms.repo.j2
+    dest: /etc/yum.repos.d/rhel-7-server-rpms.repo
+
+- name: Create the rhel 7 ha repository
+  template:
+    src: rhel-ha-for-rhel-7-server-rpms.repo.j2
+    dest: /etc/yum.repos.d/rhel-ha-for-rhel-7-server-rpms.repo
+
+- name: Create the rhel 7 openstack repository
+  template:
+    src: rhel-7-server-openstack-5.0-rpms.repo.j2
+    dest: /etc/yum.repos.d/rhel-7-server-openstack-5.0-rpms.repo
+

@@ -1,0 +1,8 @@
+#Red Hat Enterprise Linux 7 Server (RPMs)
+[rhel-7-server-rpms]
+name=Red Hat Enterprise Linux 7 Server (RPMs) $basearch
+baseurl=http://cdn.rcm-internal.redhat.com/content/dist/rhel/server/7/$releasever/$basearch/os
+enabled=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+gpgcheck=1
+
