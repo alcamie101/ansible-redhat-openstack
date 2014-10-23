@@ -44,7 +44,7 @@
     dest: /etc/yum.repos.d/rhel-ha-for-rhel-7-server-rpms.repo
 
 - name: Create the rhel 7 openstack repository
-  template:
-    src: rhel-7-server-openstack-5.0-rpms.repo.j2
+  copy:
+    src: rhel-7-server-openstack-5.0-rpms.repo
     dest: /etc/yum.repos.d/rhel-7-server-openstack-5.0-rpms.repo
 

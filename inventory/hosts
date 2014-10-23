@@ -1,0 +1,11 @@
+[openstack-controller]
+openstack-controller-01.test.local
+openstack-controller-02.test.local
+
+[openstack-compute]
+openstack-compute-01.test.local
+openstack-compute-02.test.local
+
+[openstack-network]
+openstack-network-01.test.local
+openstack-network-02.test.local
