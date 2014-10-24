@@ -1,0 +1,13 @@
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+192.168.122.19	bastion bastion.test.local
+
+## openstack VM's
+192.168.122.234	openstack-compute-01.test.local 	openstack-compute-01
+192.168.122.14	openstack-compute-02.test.local		openstack-compute-02
+192.168.122.135 openstack-controller-01.test.local	openstack-controller-01	openstack-controller-01-drac.test.local
+192.168.122.189 openstack-controller-02.test.local	openstack-controller-02	openstack-controller-02-drac.test.local
+192.168.122.136 openstack-network-01.test.local		openstack-network-01	openstack-network-01-drac.test.local
+192.168.122.201 openstack-network-02.test.local		openstack-network-02	openstack-network-02-drac.test.local
+

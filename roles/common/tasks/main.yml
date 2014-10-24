@@ -4,6 +4,12 @@
 - name: disable selinux
   selinux: state=permissive policy=targeted
 
+## This is only used for a test deployment or if you have no DNS configured
+- name: Copy hosts file to test nodes
+  copy:
+    src: hosts
+    dest: /etc/hosts owner=root group=root mode=0644
+
 #- name: enable needed channels
 #  redhat_subscription: username={{ redhat_username }} password={{ redhat_password }} pool='{{ item }}'
 #  with_items:
@@ -28,10 +34,10 @@
 #- name: Disable iptables
 #  service: name=iptables state=stopped enabled=no
 
-- name: Create the rhel 7 server, optional repository
-  template:
-    src: rhel-7-server-optional-rpms.repo.j2
-    dest: /etc/yum.repos.d/rhel-7-server-optional-rpms.repo
+#- name: Create the rhel 7 server, optional repository
+#  template:
+#    src: rhel-7-server-optional-rpms.repo.j2
+#    dest: /etc/yum.repos.d/rhel-7-server-optional-rpms.repo
 
 - name: Create the rhel 7 server repository
   template:
@@ -47,4 +53,3 @@
   copy:
     src: rhel-7-server-openstack-5.0-rpms.repo
     dest: /etc/yum.repos.d/rhel-7-server-openstack-5.0-rpms.repo
-
