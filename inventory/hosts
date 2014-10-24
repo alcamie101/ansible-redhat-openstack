@@ -1,11 +1,14 @@
+# Controller node hosts, a minimum of 2 are required for clustering a third is deal for maintaining the cluster quorum
 [openstack-controller]
 openstack-controller-01.test.local
 openstack-controller-02.test.local
 
+# Compute nodes. You can have as many nodes here as you like?? Yet to be tested
 [openstack-compute]
 openstack-compute-01.test.local
 openstack-compute-02.test.local
 
+# Network node hosts, a minimum of 2 are required for clustering a third is deal for maintaining the cluster quorum
 [openstack-network]
 openstack-network-01.test.local
 openstack-network-02.test.local
