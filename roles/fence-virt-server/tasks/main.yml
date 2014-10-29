@@ -1,0 +1,15 @@
+---
+#- name: install fence-virt agents for kvm vm (Required for test build on virtual machines)
+#  yum: name={{ item }}
+#  with_items:
+#    - fence-virt 
+
+- name: copy key file to vm
+  copy: src=cluster dest=/etc/ owner=root group=root 
+
+#- name: Install the libvirt client libraries so that a fencing mechanism can be set up
+#   yum: name={{ item }}
+#      with_items:
+#        - libvirt-client.x86_64
+#        - libvirt-python.x86_64
+#        - libvirt.x86_64                
