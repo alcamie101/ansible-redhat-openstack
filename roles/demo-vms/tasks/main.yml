@@ -1,0 +1,46 @@
+---
+# The common tasks
+
+- name: disable selinux
+  selinux: state=permissive policy=targeted
+
+## This is only used for a test deployment or if you have no DNS configured
+##
+- name: Copy hosts file to the VM's
+  copy:
+    src: hosts
+    dest: /etc/hosts
+
+#- name: Copy ntpd file to the VM's
+#  copy:
+#    src: ntp.conf
+#    dest: /etc/ntp.conf
+
+
+#- name: Install ntpd 
+#   yum: name={{ item }}
+#      with_items:
+#        - ntp
+#        - ntpdate.x86_64
+#        - ntp-doc
+
+#- name: Syncronize chrony with server
+#- name: start chrony
+#  service: name=chronyd state=started enabled=yes
+
+
+        
+#- name: Create the rhel 7 server repository
+#  template:
+#    src: rhel-7-server-rpms.repo.j2
+#    dest: /etc/yum.repos.d/rhel-7-server-rpms.repo
+#
+#- name: Create the rhel 7 ha repository
+#  template:
+#    src: rhel-ha-for-rhel-7-server-rpms.repo.j2
+#    dest: /etc/yum.repos.d/rhel-ha-for-rhel-7-server-rpms.repo
+#
+#- name: Create the rhel 7 openstack repository
+#  copy:
+#    src: rhel-7-server-openstack-5.0-rpms.repo
+#    dest: /etc/yum.repos.d/rhel-7-server-openstack-5.0-rpms.repo

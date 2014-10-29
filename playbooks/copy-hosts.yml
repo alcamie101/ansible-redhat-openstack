@@ -1,0 +1,6 @@
+---
+## This with create a demo Virtual machine Openstack Cloud config based on 6 VM's
+- hosts: openstack-controller:openstack-compute:openstack-network
+  roles:
+    - demo-vms                  # copies the hosts file to all vms and adds yum repos
+

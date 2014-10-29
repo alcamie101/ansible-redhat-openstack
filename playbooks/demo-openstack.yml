@@ -1,0 +1,23 @@
+---
+## This with create a demo Virtual machine Openstack Cloud config based on 6 VM's
+- hosts: openstack-controller:openstack-compute:openstack-network
+  roles:
+    - demo-vms                  # copies the hosts file to all vms and adds yum repos
+    #- fence-virt-server         # installs and configures the fence client
+
+- hosts: openstack-controller:openstack-compute:openstack-network
+  roles:
+    - common
+
+- hosts: openstack-controller
+  roles:
+    - openstack/controller
+
+- hosts: openstack-compute
+  roles:
+    - openstack/compute
+
+- hosts: openstack-network
+  roles:
+    - openstack/network
+
