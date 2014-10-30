@@ -25,3 +25,11 @@
 
 - name: start rabbitmq service on all nodes
   service: name=rabbitmq-server state=started enabled=yes
+#  register: rabbitmq-server-start-result
+#  failed_when: "'Active: failed' in rabbitmq-server-start-result.stderr"
+#  ignore_errors: yes
+
+#- name: restart rabbitmq if not started
+#  service: name=rabbitmq-server state=restart
+#  when: rabbitmq-server-start-result
+#

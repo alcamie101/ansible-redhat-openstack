@@ -5,19 +5,23 @@
     - demo-vms                  # copies the hosts file to all vms and adds yum repos
     #- fence-virt-server         # installs and configures the fence client
 
-- hosts: openstack-controller:openstack-compute:openstack-network
-  roles:
-    - common
+## include base openstack playbooks
+#
 
-- hosts: openstack-controller
-  roles:
-    - openstack/controller
-
-- hosts: openstack-compute
-  roles:
-    - openstack/compute
-
-- hosts: openstack-network
-  roles:
-    - openstack/network
+- include: deploy-openstack.yml
+#- hosts: openstack-controller:openstack-compute:openstack-network
+#  roles:
+#    - common
+#
+#- hosts: openstack-controller
+#  roles:
+#    - openstack/controller
+#
+#- hosts: openstack-compute
+#  roles:
+#    - openstack/compute
+#
+#- hosts: openstack-network
+#  roles:
+#    - openstack/network
 

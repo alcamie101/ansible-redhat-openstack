@@ -28,6 +28,9 @@
     - [ true, false ]
     - [ '5000/tcp', '35357/tcp' ]
 
+- name: change ownership of /var/log/keystone/keystone.log
+  file: path=/var/log/keystone/keystone.log owner=keystone group=keystone mode=660 state=touch
+
 - name: Start the keystone services
   service: name=openstack-keystone state=started enabled=yes
   when: pacemaker_service_control == false

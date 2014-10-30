@@ -1,2 +1,3 @@
 ---
-neutron_server_tunnel_interface: em2
+#neutron_server_tunnel_interface: em2
+neutron_server_tunnel_interface: eth0
