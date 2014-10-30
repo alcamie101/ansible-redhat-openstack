@@ -1,0 +1,916 @@
+################################################################################
+##   Build notes for the KVM Build - This build is not fully complet but through
+##   time constraints I'm moving onto the cloud on cloud build
+################################################################################
+
+##  Process for setting up test Open Stack Environment - The Idiots guide
+Create 6 vm's
+2 x compute nodes
+
+    openstack-compute-01.test.local
+
+    openstack-compute-02.test.local
+
+2 x controller nodes (these be clustered)
+
+    openstack-controller-01.test.local
+
+    openstack-controller-02.test.local
+
+2 x network nodes (these be clustered)
+
+    openstack-network-01.test.local
+
+    openstack-network-02.test.local
+
+VM config for nodes should be as follows:
+
+    Compute nodes
+
+    Hypervisor: kvm
+
+    Architecture: x86_64
+
+    Emulator: /usr/libexec/qemu-kvm
+
+    processor: 2 CPU
+
+    Model: Copy host CPU configuration
+
+    Memory: 4096
+
+    Storage size: 30 GB
+
+    Disk Bus: Virtio
+
+    Storage Format: qcow2
+
+    NIC-1:
+
+    Source Device: Virtual network 'default' : NAT
+
+    Device Model: virtio
+
+    Display Type: Spice
+
+see attached: openstack-compute-01.xml
+[root@dhcp qemu]# cat openstack-compute-01.xml
+<!---------------------------------------------------------------------------------------------------------------------------------------------->
+<!--
+WARNING: THIS IS AN AUTO-GENERATED FILE. CHANGES TO IT ARE LIKELY TO BE
+OVERWRITTEN AND LOST. Changes to this xml configuration should be made using:
+  virsh edit openstack-compute-01
+or other application using the libvirt API.
+-->
+<domain type='kvm'>
+  <name>openstack-compute-01</name>
+  <uuid>d7ad8c6b-1c12-1119-55ed-ed0ef9582206</uuid>
+  <memory unit='KiB'>4194304</memory>
+  <currentMemory unit='KiB'>4194304</currentMemory>
+  <vcpu placement='static'>2</vcpu>
+  <os>
+    <type arch='x86_64' machine='pc-i440fx-rhel7.0.0'>hvm</type>
+    <boot dev='hd'/>
+    <boot dev='cdrom'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <pae/>
+  </features>
+  <cpu mode='custom' match='exact'>
+    <model fallback='allow'>SandyBridge</model>
+    <vendor>Intel</vendor>
+    <feature policy='require' name='pbe'/>
+    <feature policy='require' name='tm2'/>
+    <feature policy='require' name='est'/>
+    <feature policy='require' name='vmx'/>
+    <feature policy='require' name='osxsave'/>
+    <feature policy='require' name='smx'/>
+    <feature policy='require' name='ss'/>
+    <feature policy='require' name='ds'/>
+    <feature policy='require' name='vme'/>
+    <feature policy='require' name='dtes64'/>
+    <feature policy='require' name='ht'/>
+    <feature policy='require' name='dca'/>
+    <feature policy='require' name='pcid'/>
+    <feature policy='require' name='tm'/>
+    <feature policy='require' name='pdcm'/>
+    <feature policy='require' name='pdpe1gb'/>
+    <feature policy='require' name='ds_cpl'/>
+    <feature policy='require' name='xtpr'/>
+    <feature policy='require' name='acpi'/>
+    <feature policy='require' name='monitor'/>
+  </cpu>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/libexec/qemu-kvm</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2' cache='none'/>
+      <source file='/storage/libvirt/images/openstack-compute-01.test.local.img'/>
+      <target dev='vda' bus='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <driver name='qemu' type='raw'/>
+      <target dev='hdc' bus='ide'/>
+      <readonly/>
+      <address type='drive' controller='0' bus='1' target='0' unit='0'/>
+    </disk>
+    <controller type='usb' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x2'/>
+    </controller>
+    <controller type='pci' index='0' model='pci-root'/>
+    <controller type='ide' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x1'/>
+    </controller>
+    <controller type='virtio-serial' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
+    </controller>
+    <interface type='network'>
+      <mac address='52:54:00:0f:ee:78'/>
+      <source network='default'/>
+      <model type='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+    </interface>
+    <serial type='pty'>
+      <target port='0'/>
+    </serial>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+    <channel type='spicevmc'>
+      <target type='virtio' name='com.redhat.spice.0'/>
+      <address type='virtio-serial' controller='0' bus='0' port='1'/>
+    </channel>
+    <input type='tablet' bus='usb'/>
+    <input type='mouse' bus='ps2'/>
+    <graphics type='spice' autoport='yes'/>
+    <video>
+      <model type='qxl' ram='65536' vram='65536' heads='1'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
+    </video>
+    <memballoon model='virtio'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
+    </memballoon>
+  </devices>
+</domain>
+<!---------------------------------------------------------------------------------------------------------------------------------------------->
+
+    Controller nodes
+
+    Hypervisor: kvm
+
+    Architecture: x86_64
+
+    Emulator: /usr/libexec/qemu-kvm
+
+    processor: 1 CPU
+
+    Model: Copy host CPU configuration
+
+    Memory: 4096
+
+    Storage size: 100 GB
+
+    Disk Bus: Virtio
+
+    Storage Format: qcow2
+
+    NIC-1:
+
+    Source Device: Virtual network 'default' : NAT
+
+    Device Model: virtio
+
+    Display Type: Spice
+
+see attached: openstack-controller-01.xml
+[root@dhcp qemu]# cat openstack-controller-01.xml
+<!---------------------------------------------------------------------------------------------------------------------------------------------->
+<!--
+WARNING: THIS IS AN AUTO-GENERATED FILE. CHANGES TO IT ARE LIKELY TO BE
+OVERWRITTEN AND LOST. Changes to this xml configuration should be made using:
+  virsh edit openstack-controller-01
+or other application using the libvirt API.
+-->
+<domain type='kvm'>
+  <name>openstack-controller-01</name>
+  <uuid>e8b87467-2175-ff7e-e176-8f2cd65ac913</uuid>
+  <memory unit='KiB'>4194304</memory>
+  <currentMemory unit='KiB'>4194304</currentMemory>
+  <vcpu placement='static'>1</vcpu>
+  <os>
+    <type arch='x86_64' machine='pc-i440fx-rhel7.0.0'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <pae/>
+  </features>
+  <cpu mode='custom' match='exact'>
+    <model fallback='allow'>SandyBridge</model>
+    <vendor>Intel</vendor>
+    <feature policy='require' name='pbe'/>
+    <feature policy='require' name='tm2'/>
+    <feature policy='require' name='est'/>
+    <feature policy='require' name='vmx'/>
+    <feature policy='require' name='osxsave'/>
+    <feature policy='require' name='smx'/>
+    <feature policy='require' name='ss'/>
+    <feature policy='require' name='ds'/>
+    <feature policy='require' name='vme'/>
+    <feature policy='require' name='dtes64'/>
+    <feature policy='require' name='ht'/>
+    <feature policy='require' name='dca'/>
+    <feature policy='require' name='pcid'/>
+    <feature policy='require' name='tm'/>
+    <feature policy='require' name='pdcm'/>
+    <feature policy='require' name='pdpe1gb'/>
+    <feature policy='require' name='ds_cpl'/>
+    <feature policy='require' name='xtpr'/>
+    <feature policy='require' name='acpi'/>
+    <feature policy='require' name='monitor'/>
+  </cpu>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/libexec/qemu-kvm</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2' cache='none'/>
+      <source file='/storage/libvirt/images/openstack-controller-01.test.local.img'/>
+      <target dev='vda' bus='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <driver name='qemu' type='raw'/>
+      <target dev='hdc' bus='ide'/>
+      <readonly/>
+      <address type='drive' controller='0' bus='1' target='0' unit='0'/>
+    </disk>
+    <controller type='usb' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x2'/>
+    </controller>
+    <controller type='pci' index='0' model='pci-root'/>
+    <controller type='ide' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x1'/>
+    </controller>
+    <controller type='virtio-serial' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
+    </controller>
+    <interface type='network'>
+      <mac address='52:54:00:07:e5:9e'/>
+      <source network='default'/>
+      <model type='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+    </interface>
+    <serial type='pty'>
+      <target port='0'/>
+    </serial>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+    <channel type='spicevmc'>
+      <target type='virtio' name='com.redhat.spice.0'/>
+      <address type='virtio-serial' controller='0' bus='0' port='1'/>
+    </channel>
+    <input type='tablet' bus='usb'/>
+    <input type='mouse' bus='ps2'/>
+    <graphics type='spice' autoport='yes'/>
+    <video>
+      <model type='qxl' ram='65536' vram='65536' heads='1'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
+    </video>
+    <memballoon model='virtio'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
+    </memballoon>
+  </devices>
+</domain>
+<!---------------------------------------------------------------------------------------------------------------------------------------------->
+
+    Network nodes
+
+    Hypervisor: kvm
+
+    Architecture: x86_64
+
+    Emulator: /usr/libexec/qemu-kvm
+
+    processor: 1 CPU
+
+    Model: Copy host CPU configuration
+
+    Memory: 2048
+
+    Storage size: 30 GB
+
+    Disk Bus: Virtio
+
+    Storage Format: qcow2
+
+    NIC-1:
+
+    Source Device: Virtual network 'default' : NAT
+
+    Device Model: virtio
+
+    NIC2:
+
+    Source Device: Host device eno1 : macvtap
+
+    Device Model: virtio
+
+    Source Mode: VEPA
+
+    Display Type: Spice
+
+see attached: openstack-network-01.xml
+[root@dhcp qemu]# cat openstack-network-01.xml
+<!---------------------------------------------------------------------------------------------------------------------------------------------->
+<!--
+WARNING: THIS IS AN AUTO-GENERATED FILE. CHANGES TO IT ARE LIKELY TO BE
+OVERWRITTEN AND LOST. Changes to this xml configuration should be made using:
+  virsh edit openstack-network-01
+or other application using the libvirt API.
+-->
+<domain type='kvm'>
+  <name>openstack-network-01</name>
+  <uuid>d4b72f8e-c7c0-14b4-de77-0007c69ac292</uuid>
+  <memory unit='KiB'>2097152</memory>
+  <currentMemory unit='KiB'>2097152</currentMemory>
+  <vcpu placement='static'>1</vcpu>
+  <os>
+    <type arch='x86_64' machine='pc-i440fx-rhel7.0.0'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <pae/>
+  </features>
+  <cpu mode='custom' match='exact'>
+    <model fallback='allow'>SandyBridge</model>
+    <vendor>Intel</vendor>
+    <feature policy='require' name='pbe'/>
+    <feature policy='require' name='tm2'/>
+    <feature policy='require' name='est'/>
+    <feature policy='require' name='vmx'/>
+    <feature policy='require' name='osxsave'/>
+    <feature policy='require' name='smx'/>
+    <feature policy='require' name='ss'/>
+    <feature policy='require' name='ds'/>
+    <feature policy='require' name='vme'/>
+    <feature policy='require' name='dtes64'/>
+    <feature policy='require' name='ht'/>
+    <feature policy='require' name='dca'/>
+    <feature policy='require' name='pcid'/>
+    <feature policy='require' name='tm'/>
+    <feature policy='require' name='pdcm'/>
+    <feature policy='require' name='pdpe1gb'/>
+    <feature policy='require' name='ds_cpl'/>
+    <feature policy='require' name='xtpr'/>
+    <feature policy='require' name='acpi'/>
+    <feature policy='require' name='monitor'/>
+  </cpu>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/libexec/qemu-kvm</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2' cache='none'/>
+      <source file='/storage/libvirt/images/openstack-network-01.test.local.img'/>
+      <target dev='vda' bus='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <driver name='qemu' type='raw'/>
+      <target dev='hdc' bus='ide'/>
+      <readonly/>
+      <address type='drive' controller='0' bus='1' target='0' unit='0'/>
+    </disk>
+    <controller type='usb' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x2'/>
+    </controller>
+    <controller type='pci' index='0' model='pci-root'/>
+    <controller type='ide' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x1'/>
+    </controller>
+    <controller type='virtio-serial' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
+    </controller>
+    <interface type='network'>
+      <mac address='52:54:00:33:77:a9'/>
+      <source network='default'/>
+      <model type='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+    </interface>
+    <interface type='direct'>
+      <mac address='52:54:00:cd:58:e2'/>
+      <source dev='eno1' mode='vepa'/>
+      <model type='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
+    </interface>
+    <serial type='pty'>
+      <target port='0'/>
+    </serial>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+    <channel type='spicevmc'>
+      <target type='virtio' name='com.redhat.spice.0'/>
+      <address type='virtio-serial' controller='0' bus='0' port='1'/>
+    </channel>
+    <input type='tablet' bus='usb'/>
+    <input type='mouse' bus='ps2'/>
+    <graphics type='spice' autoport='yes'/>
+    <video>
+      <model type='qxl' ram='65536' vram='65536' heads='1'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
+    </video>
+    <memballoon model='virtio'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
+    </memballoon>
+  </devices>
+</domain>
+<!---------------------------------------------------------------------------------------------------------------------------------------------->
+Base VM install - OS and initial configuration prior to applying ansible script
+OS installation source for all nodes: rhel-server-7.0-x86_64-dvd.iso
+
+    Netowork & Hostname:
+
+    Make sure that all network devices are enabled
+
+    Hostname: openstack-[compute|controller|network]-[XX].test.local
+
+    Date & Time:
+
+    Network Time: ON
+
+    Software Selection
+
+    Minimal Install
+
+    Add-Ons for Selected Environment: Development Tools
+
+    Installation Destination:
+
+    Other Storage Options:
+
+    Partitioning: Automatically Configure Partitioning
+
+With these settings complete, you can now begin installation.
+Setup your root password and create a user too. You can make the user an administrator.
+***Snapshot time (At particular instances through the install and config I will mention particularly good time to snapshot your VM's so that you can rollback if you make a mistake)
+As you are setting up a test environment, you may find it useful to take snapshots of your VM's once the OS in installed prior to continuing. On you hypervisor you'll want to do something like this for each vm. This takes only a few seconds for each VM if they are shutdown first. If you try and snapshot while the machines are live you will find that it will take around more than 5 mins per VM:
+virsh snapshot-create-as --domain openstack-compute-01 --name initial --description "This is the initial snapshot on this $date"
+list-snapshots: You can list snapshots like this
+[root@dhcp ~]# virsh snapshot-list openstack-compute-01
+[root@dhcp ~]# virsh snapshot-list openstack-compute-02
+[root@dhcp ~]# virsh snapshot-list openstack-controller-01
+[root@dhcp ~]# virsh snapshot-list openstack-controller-02
+[root@dhcp ~]# virsh snapshot-list openstack-network-01
+[root@dhcp ~]# virsh snapshot-list openstack-network-02
+I wrote this to shell script to make it a simple processs to do this quickly. ( This is a quick hack that I will need to make pretty and robust)
+snapshot-vms.sh:
+[root@dhcp ~]# cat deployed-scripts/snapshot-vms.sh 
+                ##################################################################################################
+                #!/bin/bash
+                #************************************************#
+                #           snapshot-openstack-vms.sh            #
+                #            written by Chris Long               #
+                #                Oct 23, 2014                    #
+                #                                                #
+                #   take a quick snapshot of all the openstack   #
+                #   test VM's and add a name and date.           #
+                #************************************************#
+                
+                # Script Variables
+                #------------------------------------------------#
+                # Parameter: $name                               #
+                
+                E_BADSNAP=155                   #Snapshots failed
+                PROMPT=$1
+                DATE=`date`
+                DESC="Snapshot for $DATE"
+                
+                ###### Snapshot the vm's
+                
+                # openstack-compute-01
+                virsh snapshot-create-as --domain openstack-compute-01 --name $PROMPT --description "$PROMPT: $DESC"
+                echo "openstack-compute-01 snapshot complete"
+                
+                # openstack-compute-02
+                virsh snapshot-create-as --domain openstack-compute-02 --name $PROMPT --description "$PROMPT: $DESC"
+                echo "openstack-compute-02 snapshot complete"
+                
+                # openstack-controller-01
+                virsh snapshot-create-as --domain openstack-controller-01 --name $PROMPT --description "$PROMPT: $DESC"
+                echo "openstack-controller-01 snapshot complete"
+                
+                # openstack-controller-02
+                virsh snapshot-create-as --domain openstack-controller-02 --name $PROMPT --description "$PROMPT: $DESC"
+                echo "openstack-controller-02 snapshot complete"
+                
+                # openstack-network-01
+                virsh snapshot-create-as --domain openstack-network-01 --name $PROMPT --description "$PROMPT: $DESC"
+                echo "openstack-network-01 snapshot complete"
+                
+                # openstack-network-02
+                virsh snapshot-create-as --domain openstack-network-02 --name $PROMPT --description "$PROMPT: $DESC"
+                echo "openstack-network-02 snapshot complete"
+                echo
+                echo "$DESC are complete"
+                
+                Exit 0
+                ##################################################################################################
+And this script will quickly revert to a chosen snapshot.
+revert-to-pre-ansible:
+[root@dhcp ~]# cat revert-to-pre-ansible.sh
+                ##################################################################################################
+                #!/bin/bash
+                #************************************************#
+                #            revert-to-pre-ansible               #
+                #            written by Chris Long               #
+                #                Oct 23, 2014                    #
+                #                                                #
+                #   Revert snapshots of all the openstack        #
+                #   test VM's.                                   #
+                #************************************************#
+                
+                # Script Variables
+                #------------------------------------------------#
+                # Parameter: $name                               #
+                
+                E_BADSNAP=155                   #Snapshots failed
+                PROMPT=$1
+                DATE=`date`
+                
+                ## restore openstack test machines to pre ansible state
+                # openstack-compute-01
+                virsh snapshot-revert openstack-compute-01 $PROMPT
+                echo "virsh snapshot-revert openstack-compute-01 $PROMPT is complete at: $DATE"
+                
+                # openstack-compute-02
+                virsh snapshot-revert openstack-compute-02 $PROMPT
+                echo "virsh snapshot-revert openstack-compute-02 $PROMPT is complete at: $DATE"
+                
+                # openstack-controller-01
+                virsh snapshot-revert openstack-controller-01 $PROMPT
+                echo "virsh snapshot-revert openstack-controller-01 $PROMPT is complete at: $DATE"
+                
+                # openstack-controller-02
+                virsh snapshot-revert openstack-controller-02 $PROMPT
+                echo "virsh snapshot-revert openstack-controller-02 $PROMPT is complete at: $DATE"
+                
+                # openstack-network-01
+                virsh snapshot-revert openstack-network-01 $PROMPT
+                echo "virsh snapshot-revert openstack-network-01 $PROMPT is complete at: $DATE"
+                
+                # openstack-network-02
+                virsh snapshot-revert openstack-network-02 $PROMPT
+                echo "virsh snapshot-revert openstack-network-02 $PROMPT is complete at: $DATE"
+                echo
+                echo
+                echo "The revert to $PROMPT snapshot completed at: $DATE"
+                
+                Exit 0
+                ##################################################################################################
+Once all of the initial snapshots have been taken you can now obtain the ip addresses of each VM by logging in and issuing the command:
+[root@dhcp ~]# ip a
+You must add these to a DNS or create a 'hosts' file that will be placed on each VM in:
+/etc/hosts
+it will look similar to this:
+03:39:11 {master} ~/sandbox/ansible-redhat-openstack-alcamie101# cat /etc/hosts
+                ############################################ Openstack test build hosts file: Begin ###########################################
+                127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+                ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+                
+                192.168.122.19    bastion bastion.test.local
+                
+                ## openstack VM's
+                192.168.122.234    openstack-compute-01.test.local       openstack-compute-01
+                192.168.122.14      openstack-compute-02.test.local       openstack-compute-02
+                192.168.122.135    openstack-controller-01.test.local      openstack-controller-01     openstack-controller-01-drac.test.local
+                192.168.122.189    openstack-controller-02.test.local      openstack-controller-02     openstack-controller-02-drac.test.local
+                192.168.122.136    openstack-network-01.test.local        openstack-network-01       openstack-network-01-drac.test.local
+                192.168.122.201    openstack-network-02.test.local        openstack-network-02       openstack-network-02-drac.test.local
+                
+                ############################################ Openstack test build hosts file: End  ############################################
+You should also copy you public key from the machine that you're going to be running the ansible playbooks from to the test vm's. This will ensure that ansible can connect to those machines with no issues as root. This can be done simply by using the following command from that machine:
+Copy id_rsa.pub to all openstack VM's
+for i in root@openstack-compute-01.test.local root@openstack-compute-02.test.local root@openstack-controller-01.test.local root@openstack-controller-02.test.local root@openstack-network-01.test.local root@openstack-network-02.test.local;do ssh-copy-id -i ~/.ssh/id_rsa.pub $i;done
+This should be handled by ansible. I'm not sure why this is not at the moment.  Here's a CLI option to use for now
+copy hosts files
+05:04:30 {master} ~/sandbox/ansible-redhat-openstack-alcamie101# for i in root@openstack-compute-01.test.local root@openstack-compute-02.test.local root@openstack-controller-01.test.local root@openstack-controller-02.test.local root@openstack-network-01.test.local root@openstack-network-02.test.local;do rsync -avrhP /etc/hosts $i:/etc/hosts; done
+Installing and configuring fence daemon on hypervisor and agent's on VM's
+The following resource is invaluable https://alteeve.ca/w/Fencing_KVM_Virtual_Servers. This is where I got the following process from.
+
+    You will need to setup the Hypervisor to listen for fence requests from guests.
+
+    You will also need to setup and configure the guests to talk to the hosts daemon using 'fence_xvm' fence agents
+
+1. For your Hypervisor host:
+[root@dhcp ~]# yum install -y fence-virt fence-virtd fence-virtd-multicast fence-virtd-libvirt
+[root@dhcp ~]# yum install fence-virt fence-virtd fence-virtd-multicast fence-virtd-libvirt
+Loaded plugins: langpacks, product-id, subscription-manager
+This system is not registered to Red Hat Subscription Management. You can use subscription-manager to register.
+epel/x86_64/metalink                                                                                                               | 2.6 kB  00:00:00
+epel                                                                                                                                           | 4.4 kB  00:00:00
+rhel-7-server-openstack-5.0-rpms                                                                                          | 3.1 kB  00:00:00
+rhel-7-server-rpms                                                                                                                   | 3.7 kB  00:00:00
+(1/2): epel/x86_64/primary_db                                                                                                 | 3.4 MB  00:00:01
+(2/2): rhel-7-server-rpms/7Server/x86_64/primary_db                                                           | 6.7 MB  00:00:26
+(1/4): epel/x86_64/updateinfo                                                                                                  |  92 kB  00:00:00 
+(2/4): epel/x86_64/pkgtags                                                                                                      | 1.3 MB  00:00:00
+(3/4): rhel-7-server-rpms/7Server/x86_64/updateinfo                                                            | 106 kB  00:00:02
+(4/4): rhel-7-server-rpms/7Server/x86_64/group_gz                                                              | 133 kB  00:00:02
+Resolving Dependencies
+--> Running transaction check
+---> Package fence-virt.x86_64 0:0.3.0-16.el7 will be installed
+---> Package fence-virtd.x86_64 0:0.3.0-16.el7 will be installed
+---> Package fence-virtd-libvirt.x86_64 0:0.3.0-16.el7 will be installed
+---> Package fence-virtd-multicast.x86_64 0:0.3.0-16.el7 will be installed
+--> Finished Dependency Resolution
+Dependencies Resolved
+===========================================================================================
+ Package                                          Arch                              Version                                  Repository                                     Size
+===========================================================================================
+Installing:
+ fence-virt                                       x86_64                            0.3.0-16.el7                             rhel-7-server-rpms                      39 k
+ fence-virtd                                     x86_64                            0.3.0-16.el7                             rhel-7-server-rpms                      31 k
+ fence-virtd-libvirt                          x86_64                            0.3.0-16.el7                             rhel-7-server-rpms                      15 k
+ fence-virtd-multicast                    x86_64                            0.3.0-16.el7                             rhel-7-server-rpms                      20 k
+Transaction Summary
+===========================================================================================
+Install  4 Packages
+Total download size: 106 k
+Installed size: 170 k
+Is this ok [y/d/N]: y
+Downloading packages:
+(1/4): fence-virt-0.3.0-16.el7.x86_64.rpm                                                                               |  39 kB  00:00:01     
+(2/4): fence-virtd-0.3.0-16.el7.x86_64.rpm                                                                             |  31 kB  00:00:01     
+(3/4): fence-virtd-multicast-0.3.0-16.el7.x86_64.rpm                                                            |  20 kB  00:00:00     
+(4/4): fence-virtd-libvirt-0.3.0-16.el7.x86_64.rpm                                                                  |  15 kB  00:00:00     
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                            46 kB/s | 106 kB  00:00:02     
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : fence-virtd-0.3.0-16.el7.x86_64                                                                           1/4 
+  Installing : fence-virtd-libvirt-0.3.0-16.el7.x86_64                                                                2/4 
+  Installing : fence-virtd-multicast-0.3.0-16.el7.x86_64                                                          3/4 
+  Installing : fence-virt-0.3.0-16.el7.x86_64                                                                             4/4 
+rhel-7-server-rpms/7Server/x86_64/productid                                                                       | 1.7 kB  00:00:00     
+  Verifying  : fence-virtd-libvirt-0.3.0-16.el7.x86_64                                                                1/4 
+  Verifying  : fence-virtd-multicast-0.3.0-16.el7.x86_64                                                          2/4 
+  Verifying  : fence-virtd-0.3.0-16.el7.x86_64                                                                            3/4 
+  Verifying  : fence-virt-0.3.0-16.el7.x86_64                                                                               4/4 
+Installed:
+  fence-virt.x86_64 0:0.3.0-16.el7      fence-virtd.x86_64 0:0.3.0-16.el7      fence-virtd-libvirt.x86_64 0:0.3.0-16.el7      fence-virtd-multicast.x86_64 0:0.3.0-16.el7     
+Complete!
+2. Create the key for the Hypervisor
+We need to create a secret key that is stored in /etc/cluster/fence_xvm.key
+You can use any string that you want and use of this key ensures that only nodes in our cluster can send requests to terminate VM's to our fende daemon.
+For our testing purposes we will just set up a simple key.
+[root@dhcp ~]# mkdir -p /etc/cluster; echo secretkey>/etc/cluster/fence_xvm.key
+To configure, we run. Choose defaults for everything:
+3. Configure the fence daemon.
+[root@dhcp-40-240 ~]# fence_virtd -c
+Module search path [/usr/lib64/fence-virt]: 
+Available backends:
+    libvirt 0.1
+Available listeners:
+    multicast 1.2
+Listener modules are responsible for accepting requests
+from fencing clients.
+Listener module [multicast]: 
+The multicast listener module is designed for use environments
+where the guests and hosts may communicate over a network using
+multicast.
+The multicast address is the address that a client will use to
+send fencing requests to fence_virtd.
+Multicast IP Address [225.0.0.12]: 
+Using ipv4 as family.
+Multicast IP Port [1229]: 
+Setting a preferred interface causes fence_virtd to listen only
+on that interface.  Normally, it listens on all interfaces.
+In environments where the virtual machines are using the host
+machine as a gateway, this *must* be set (typically to virbr0).
+Set to 'none' for no interface.
+Interface [virbr0]: 
+The key file is the shared key information which is used to
+authenticate fencing requests.  The contents of this file must
+be distributed to each physical host and virtual machine within
+a cluster.
+Key File [/etc/cluster/fence_xvm.key]: 
+Backend modules are responsible for routing requests to
+the appropriate hypervisor or management layer.
+Backend module [libvirt]: 
+Configuration complete.
+=== Begin Configuration ===
+backends {
+        libvirt {
+                uri = "qemu:///system";
+        }
+}
+listeners {
+        multicast {
+                port = "1229";
+                family = "ipv4";
+                interface = "virbr0";
+                address = "225.0.0.12";
+                key_file = "/etc/cluster/fence_xvm.key";
+        }
+}
+fence_virtd {
+        module_path = "/usr/lib64/fence-virt";
+        backend = "libvirt";
+        listener = "multicast";
+}
+=== End Configuration ===
+Replace /etc/fence_virt.conf with the above [y/N]? y
+4. Start the fence daemon
+[root@dhcp ~]# systemctl start fence_virtd
+[root@dhcp ~]# echo $?
+0
+[root@dhcp ~]# pidof fence_virtd
+16641
+Cool. You should see something similar to the results above. The PID will be different.
+The fence daemon is now running, you can test that it's running by testing it like this:
+[root@dhcp ~]# fence_xvm -o list
+bastion              f7e67746-3a61-fc93-3bff-c8c36c0e413c on
+openstack-compute-01 d7ad8c6b-1c12-1119-55ed-ed0ef9582206 on
+openstack-compute-02 6ed115f4-a553-04ca-dd14-6e02eb4a3fcc on
+openstack-controller e8b87467-2175-ff7e-e176-8f2cd65ac913 on
+openstack-controller 4ac68802-e641-2e90-11dc-fafd1baa5199 on
+openstack-network-01 d4b72f8e-c7c0-14b4-de77-0007c69ac292 on
+openstack-network-02 4b396452-7784-b12d-382c-bed007dbf111 on
+This should show you all of your VM's that you have running on your hypervisor.
+Next we need to test to see if we need to enable our multicast querier for the virbr0 bridge. Test by running this:
+[root@dhcp ~]# cat /sys/class/net/virbr0/bridge/multicast_querier
+0
+If it's 0 then we have to enable it by setting it to 1. To do this we just write a 1 to that file.
+[root@dhcp ~]# echo 1 > /sys/class/net/virbr0/bridge/multicast_querier\
+you can test to make sure that this worked:
+[root@dhcp ~]# cat /sys/class/net/virbr0/bridge/multicast_querier
+1
+5. Configure the fence daemon to make it persistant.
+To make this persistant you can add a script that loops through all the bridge names, vibrX and enables thier multicast querier. Then we create udev rules file.
+[root@dhcp ~]# touch /etc/sysconfig/network-scripts/vnet_querier_enable
+[root@dhcp ~]# chmod 755 /etc/sysconfig/network-scripts/vnet_querier_enable
+[root@dhcp ~]# vi /etc/sysconfig/network-scripts/vnet_querier_enable
+This is the content of the script that you need to add.
+[root@dhcp ~]# cat /etc/sysconfig/network-scripts/vnet_querier_enable
+                #!/bin/sh
+                if [[ $INTERFACE == virbr* ]]; then
+                    /bin/echo 1 > /sys/devices/virtual/net/$INTERFACE/bridge/multicast_querier
+                fi
+Create the udev rules file.
+[root@dhcp ~]# vi /etc/udev/rules.d/61-virbr-querier.rules
+This is the content of the file:
+[root@dhcp ~]# cat /etc/udev/rules.d/61-virbr-querier.rules
+ACTION=="add", SUBSYSTEM=="net", RUN+="/etc/sysconfig/network-scripts/vnet_querier_enable"
+This should now enable every virbrX bridge on boot.
+and we're ready for the next part of the process, setting up the VM's
+6. Setup and configuration of the VM Guests
+Network: This needs to be configured so that the clustering will work: 
+vi /etc/sysconfig/network-scripts/ifcfg-eth0
+openstack-controller-01        These have to be set to: 
+                                                                                    BOOTPROTO=none
+                                                                                    IPADDR=XXX.XXX.XXX.XXX (you can replace this with the number that 'ip a' gives you when you're in DHCP)
+                                                                                    GATEWAY=192.168.122.1 (This is the default gateway address for a default KVM build)
+                                                                                    Every thing else can stay as is.
+openstack-controller-02        same as openstack-controller-01
+openstack-network-01          same as openstack-controller-01
+openstack-network-02          same as openstack-controller-01
+Run playbook 
+ansible-playbook -vvvv playbooks/demo-openstack.yml 
+Where things aren't playing nice
+
+    The mariadb startup is still not a clean thing. Have to use manual intervention to bring it up to a state where both are masters (lets refine this next time through)
+
+fix:
+    8  systemctl status mariadb
+    9   ps auxww | grep maria
+   10   journalctl -u mariadb
+   11   journalctl -u mariadb.service
+   12  systemctl status mariadb.service
+   13  pcs resource cleanup mariadb
+   14  crm_mon
+   15   pcs resource disable mariadb
+   16  systemctl start mariadb.service
+   17   journalctl -u mariadb.service
+   18   systemctl status mariadb.service
+   19   systemctl stop mariadb.service
+   20   ls -lah /var/log/mariadb/mariadb.log
+   21  pcs resource enable mariadb
+   22    pcs resource cleanup mariadb
+   23  crm_mon
+
+    [Rabbit-MQ] temp fix to start is to manually start as they can't start simultaneously. Maybe look at pushing a sleep / pause function (handlers didn't work as they stand at the moment)
+
+fix:
+systemctl status rabbitmq-server
+systemctl start rabbitmq-server
+
+    TASK: [keystone-server | Start the keystone services] 
+
+chown keystone: /var/log/keystone/keystone.log
+- name: change ownership of /var/log/keystone/keystone.log
+  file: path=/var/log/keystone/keystone.log owner=keystone group=keystone mode=660 state=touch
+
+    TASK: [keystone-server | create service tenant in keystone] (may work after log permissions fix)
+
+USEFUL DEBUG COMMANDS
+-------------------------------------------
+This was for fixing the Mariadb
+    1  ip a
+    2  shutdown
+    3  shutdown -r 10s
+    4  shutdown -r 1
+    5  cat  /etc/chrony.conf
+    6  date
+    7  chronyc sources -v
+    8  date
+    9  tail -f /var/log/messages
+   10  ls
+   11  pcs stonith show 
+   12  pcs stonith 
+   13  pcs
+   14  pcs resource 
+   15  pcs stonith create openstack-controller-01.test.local-stonith fence-virt passwd=/etc/cluster/fence_xvm.key action=reboot pcmk_host_check=static-list pcmk_host_list=openstack-controller-01.test.local
+   16  pcs stonith create openstack-controller-01.test.local-stonith fence_virt passwd=/etc/cluster/fence_xvm.key action=reboot pcmk_host_check=static-list pcmk_host_list=openstack-controller-01.test.local
+   17  ip route
+   18  virsh
+   19  yum search libvirt
+   20  ping 192.168.122.1
+   21  yum install -y libvirt-client.x86_64 libvirt-python.x86_64 libvirt.x86_64
+   22  y
+   23  virsh
+   24  virsh --connect=qemu+tcp://192.168.122.1/system list --all
+   25  crm_mon
+   26  crm_mon -rf
+   27  virsh --connect=qemu+tcp://192.168.122.1/system list --all
+   28  virsh --connect=qemu+tcp://10.64.40.240/system list --all
+   29  virsh --connect=qemu+tcp://192.168.122.1/system list --all
+   30  crm_mon -rf
+   31  pcs stonith describe ocf:heartbeat:fence_virt
+   32  pcs stonith describe fence_virt
+   33  crm_mon -qf
+   34  crm_mon 
+   35  tail -f /var/log/messages
+   36  crm_mon
+   37  crm_mon -rf
+   38  ps auxww | grep maria
+   39  ps auxww | grep mysql
+   40  journalctl -u mariadb-server
+   41  journalctl -u mariadb
+   42  systemctl list-units | grep maria
+   43  systemctl list-units | grep mysql
+   44  rpm -ql mariadb-galera-server | more
+   45  journalctl -u mariadb
+   46  journalctl -u mariadb.service
+   47  systemctl status mariadb.service
+   48  vi /var/log/mariadb/mariadb.log 
+   49  pcs resource cleanup mariadb
+   50  crm_mon
+   51  getenforce 
+   52  vi /var/log/pacemaker.log 
+   53  vi /etc/my.cnf.d/galera.cnf 
+   54  iptables -n -L -v
+   55  ip a
+   56  vi /etc/my.cnf.d/galera.cnf 
+   57  crm_mon
+   58  pcs resource disable mariadb
+   59  crm_mon
+   60  systemctl start mariadb.service
+   61  journalctl -u mariadb.service
+   62  ls -lah /var/log/mariadb/mariadb.log
+   63  chown mysql: /var/log/mariadb/mariadb.log
+   64  pcs resource enable mariadb
+   65  crm_mon
+   66  pcs resource cleanup mariadb
+   67  crm_mon
+   68  pcs resource disable mariadb
+   69  systemctl start mariadb
+   70  journalctl -u mariadb
+   71  systemctl stop mariadb
+   72  ps auxww | grep mysql
+   73  lsof -i -n -P | grep 3306
+   74  ip a
+   75  vi /etc/haproxy/haproxy.cfg 
+   76  systemctl restart haproxy
+   77  pcs resource enable mariadb
+   78  pcs resource cleanup mariadb
+   79  crm_mon
+   80  history
+
