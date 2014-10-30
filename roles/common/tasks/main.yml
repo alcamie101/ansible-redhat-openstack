@@ -47,3 +47,11 @@
   copy:
     src: rhel-7-server-openstack-5.0-rpms.repo
     dest: /etc/yum.repos.d/rhel-7-server-openstack-5.0-rpms.repo
+
+- name: Install yum packages
+  yum: name={{ item }} state=installed
+  with_items:
+    - deltarpm-3.6-3.el7.x86_64
+    - yum-utils
+    - yum-presto
+
