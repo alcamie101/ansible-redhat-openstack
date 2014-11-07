@@ -1,0 +1,8 @@
+---
+### Bare Metal settings
+#pacemaker_cluster_stonith_settings: fence_ipmilan auth=md5 ipaddr=openstack-controller-02-drac.test.local login=root passwd=secret action=reboot pcmk_host_check=static-list pcmk_host_list=openstack-controller-02.test.local
+
+### Virtual Machine settings openstack-controller-pefcyn4jyvlt-1-xzxueti7sz6b.novalocal.yml
+#pacemaker_cluster_stonith_settings: fence_virt auth=md5 ipaddr=openstack-controller-02-drac.test.local login=root passwd=secret action=reboot pcmk_host_check=static-list pcmk_host_list=openstack-controller-02.test.local
+pacemaker_cluster_stonith_settings: fence_virt port=openstack-controller-pefcyn4jyvlt-1-xzxueti7sz6b action=reboot pcmk_host_check=static-list pcmk_host_list=openstack-controller-pefcyn4jyvlt-1-xzxueti7sz6b.novalocal
+

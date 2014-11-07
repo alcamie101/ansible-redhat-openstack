@@ -4,7 +4,7 @@ openstack_network_external_interface: p3p1
 ### Bare Metal settings
 #pacemaker_cluster_stonith_settings: fence_ipmilan auth=md5 ipaddr=openstack-network-01.test.local login=root passwd=secret action=reboot pcmk_host_check=static-list pcmk_host_list=openstack-network-01.test.local
 
-### Virtual machine settings
+### Virtual machine settings openstack-network-sjjryi6r4jz3-0-ie2saoegxhld.novalocal.yml
 #pacemaker_cluster_stonith_settings: fence_virt auth=md5 ipaddr=openstack-network-01-drac.test.local login=root passwd=secret action=reboot pcmk_host_check=static-list pcmk_host_list=openstack-network-01.test.local
-pacemaker_cluster_stonith_settings: fence_virt port=openstack-network-01 action=reboot pcmk_host_check=static-list pcmk_host_list=openstack-network-01.test.local
+pacemaker_cluster_stonith_settings: fence_virt port=openstack-network-sjjryi6r4jz3-0-ie2saoegxhld action=reboot pcmk_host_check=static-list pcmk_host_list=openstack-network-sjjryi6r4jz3-0-ie2saoegxhld.novalocal
 

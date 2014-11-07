@@ -1,0 +1,7 @@
+---
+### Baremetal setup
+#pacemaker_cluster_stonith_settings: fence_ipmilan auth=md5 ipaddr=openstack-controller-01-drac.test.local login=root passwd=secret action=reboot pcmk_host_check=static-list pcmk_host_list=openstack-controller-01.test.local
+
+### Virtual Machine setup openstack-controller-pefcyn4jyvlt-0-a5brqyscv7zd
+pacemaker_cluster_stonith_settings: fence_virt port=openstack-controller-pefcyn4jyvlt-0-a5brqyscv7zd action=reboot pcmk_host_check=static-list pcmk_host_list=openstack-controller-pefcyn4jyvlt-0-a5brqyscv7zd.novalocal
+

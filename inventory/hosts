@@ -1,14 +1,18 @@
 # Controller node hosts, a minimum of 2 are required for clustering a third is deal for maintaining the cluster quorum
 [openstack-controller]
-openstack-controller-01.test.local
-openstack-controller-02.test.local
+openstack-controller-pefcyn4jyvlt-0-a5brqyscv7zd.novalocal
+openstack-controller-pefcyn4jyvlt-1-xzxueti7sz6b.novalocal
+openstack-controller-pefcyn4jyvlt-2-mgjoxzk6rtlp.novalocal
 
 # Compute nodes. You can have as many nodes here as you like?? Yet to be tested
 [openstack-compute]
-openstack-compute-01.test.local
-openstack-compute-02.test.local
+openstack-compute-4jccguegim2a-0-zgjdhe6s27lh.novalocal
+openstack-compute-4jccguegim2a-1-wxtuhcyolzil.novalocal
+openstack-compute-4jccguegim2a-2-rnlu6qtslm24.novalocal
+openstack-compute-4jccguegim2a-3-rcz3k5bosoed.novalocal
 
 # Network node hosts, a minimum of 2 are required for clustering a third is deal for maintaining the cluster quorum
 [openstack-network]
-openstack-network-01.test.local
-openstack-network-02.test.local
+openstack-network-sjjryi6r4jz3-0-ie2saoegxhld.novalocal
+openstack-network-sjjryi6r4jz3-1-wuct2o4wnfg7.novalocal
+openstack-network-sjjryi6r4jz3-2-goo66rxjt5xj.novalocal

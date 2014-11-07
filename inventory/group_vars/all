@@ -10,7 +10,7 @@
 ## This is used for the vip and is the haproxy cluster public ip. It will be shared between 
 ## the controller nodes by haproxy it's an address in the ip space your controller nodes are in.
 #openstack_controller_public_address: 10.10.150.12
-openstack_controller_public_address: 192.168.122.100
+openstack_controller_public_address: 192.168.10.100
 
 ## Cinder shares
 #cinder_glusterfs_shares:
