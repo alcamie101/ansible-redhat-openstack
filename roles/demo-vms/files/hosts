@@ -1,13 +1,39 @@
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 
-192.168.122.19	bastion bastion.test.local
 
-## openstack VM's
-192.168.122.234	openstack-compute-01.test.local 	openstack-compute-01
-192.168.122.14	openstack-compute-02.test.local		openstack-compute-02
-192.168.122.135 openstack-controller-01.test.local	openstack-controller-01	openstack-controller-01-drac.test.local
-192.168.122.189 openstack-controller-02.test.local	openstack-controller-02	openstack-controller-02-drac.test.local
-192.168.122.136 openstack-network-01.test.local		openstack-network-01	openstack-network-01-drac.test.local
-192.168.122.201 openstack-network-02.test.local		openstack-network-02	openstack-network-02-drac.test.local
+10.64.40.197    chlong-lap
+10.64.40.135    bastion-test
 
+##################################
+##      Openstack Hosts         ##
+##################################
+
+##################################
+##      Controller Nodes        ##
+##################################
+192.168.10.9   openstack-controller-pefcyn4jyvlt-0-a5brqyscv7zd.novalocal	openstack-controller-pefcyn4jyvlt-0-a5brqyscv7zd	openstack-controller-01
+192.168.10.7   openstack-controller-pefcyn4jyvlt-1-xzxueti7sz6b.novalocal	openstack-controller-pefcyn4jyvlt-1-xzxueti7sz6b	openstack-controller-02
+192.168.10.8   openstack-controller-pefcyn4jyvlt-2-mgjoxzk6rtlp.novalocal	openstack-controller-pefcyn4jyvlt-2-mgjoxzk6rtlp	openstack-controller-03
+
+##################################
+##      Compute Nodes           ##
+##################################
+192.168.10.13    openstack-compute-4jccguegim2a-0-zgjdhe6s27lh.novalocal	openstack-compute-4jccguegim2a-0-zgjdhe6s27lh		openstack-compute-01
+192.168.10.12    openstack-compute-4jccguegim2a-1-wxtuhcyolzil.novalocal	openstack-compute-4jccguegim2a-1-wxtuhcyolzil		openstack-compute-02
+192.168.10.11    openstack-compute-4jccguegim2a-2-rnlu6qtslm24.novalocal	openstack-compute-4jccguegim2a-2-rnlu6qtslm24		openstack-compute-03
+192.168.10.10    openstack-compute-4jccguegim2a-3-rcz3k5bosoed.novalocal	openstack-compute-4jccguegim2a-3-rcz3k5bosoed		openstack-compute-04
+
+##################################
+##      Network Nodes           ##
+##################################
+192.168.10.5    openstack-network-sjjryi6r4jz3-0-ie2saoegxhld.novalocal		openstack-network-sjjryi6r4jz3-0-ie2saoegxhld		openstack-network-01
+192.168.10.2    openstack-network-sjjryi6r4jz3-1-wuct2o4wnfg7.novalocal		openstack-network-sjjryi6r4jz3-1-wuct2o4wnfg7		openstack-network-02
+192.168.10.4    openstack-network-sjjryi6r4jz3-2-goo66rxjt5xj.novalocal		openstack-network-sjjryi6r4jz3-2-goo66rxjt5xj		openstack-network-03
+
+##################################
+##      Storage Nodes           ##
+##################################
+#192.168.10.XXX  openstack-storage-01.novalocal  openstack-storage-01
+#192.168.10.XXX  openstack-storage-02.novalocal  openstack-storage-02
+#192.168.10.XXX  openstack-storage-03.novalocal  openstack-storage-03
