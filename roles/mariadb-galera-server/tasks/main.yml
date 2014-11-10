@@ -2,12 +2,17 @@
 - name: install mariadb-galera-server packages
   yum: name={{ item }}
   with_items:
+## adding firewalld for minimal install use
+    - firewalld
     - mariadb-galera-server
     - MySQL-python
     - rsync
     - xinetd
 ## Updated galera resource agent for RHEL7 the current is only resource-agents-3.9.5-26.el7.x86_64 not 3.9.5-37
     - http://download.devel.redhat.com/brewroot/packages/resource-agents/3.9.5/37.el7/x86_64/resource-agents-3.9.5-37.el7.x86_64.rpm
+
+- name: Start firewalld
+  service: name=firewalld enabled=yes state=started
 
 - name: open firewall for database server
   firewalld: port={{ item[1] }} state=enabled permanent={{ item[0] }}
@@ -57,7 +62,7 @@
   run_once: true
 
 - name: wait for mariadb to settle and become active
-  pause: minutes=2
+  pause: minutes=1
 
 ### This was commented out when I ran this originally. I'm going to uncomment it to see what happes. It seems that maridb isn't running prior to uncommenting and so fails on the next tasks of creating a user. You need to leave this disabled as pacemaker handles
 #- name: start mariadb server

@@ -16,10 +16,9 @@
 #    src: ntp.conf
 #    dest: /etc/ntp.conf
 
-
-#- name: Install ntpd 
-#   yum: name={{ item }}
-#      with_items:
+#- hosts: openstack-controller
+#- name: Install firewalld
+#   yum: firewalld
 #        - ntp
 #        - ntpdate.x86_64
 #        - ntp-doc

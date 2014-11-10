@@ -4,5 +4,6 @@
 
 ### Virtual Machine settings openstack-controller-pefcyn4jyvlt-1-xzxueti7sz6b.novalocal.yml
 #pacemaker_cluster_stonith_settings: fence_virt auth=md5 ipaddr=openstack-controller-02-drac.test.local login=root passwd=secret action=reboot pcmk_host_check=static-list pcmk_host_list=openstack-controller-02.test.local
-pacemaker_cluster_stonith_settings: fence_virt port=openstack-controller-pefcyn4jyvlt-1-xzxueti7sz6b action=reboot pcmk_host_check=static-list pcmk_host_list=openstack-controller-pefcyn4jyvlt-1-xzxueti7sz6b.novalocal
+#pacemaker_cluster_stonith_settings: fence_virt port=openstack-controller-pefcyn4jyvlt-1-xzxueti7sz6b action=reboot pcmk_host_check=static-list pcmk_host_list=openstack-controller-pefcyn4jyvlt-1-xzxueti7sz6b.novalocal
+pacemaker_cluster_stonith_settings: fence_virt port=17f77457-1d64-42cc-8d39-99ea18cbdc8d action=reboot pcmk_host_check=static-list pcmk_host_list=openstack-controller-pefcyn4jyvlt-1-xzxueti7sz6b.novalocal
 
